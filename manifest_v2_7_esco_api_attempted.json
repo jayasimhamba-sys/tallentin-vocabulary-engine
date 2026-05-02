@@ -1,0 +1,14 @@
+{
+  "version": "2.7-esco-api-attempted",
+  "date": "2026-05-02",
+  "status": "esco_api_ready_but_sandbox_dns_blocked",
+  "attempted_endpoint": "https://ec.europa.eu/esco/api",
+  "result": "Python requests failed with DNS resolution error for ec.europa.eu",
+  "included": [
+    "ESCO API attempt log",
+    "Linux/Mac run script",
+    "Windows run script",
+    "Existing ESCO API parser and normalizer",
+    "Existing O*NET-expanded data"
+  ]
+}

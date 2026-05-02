@@ -1,0 +1,18 @@
+{
+  "version": "2.4-final",
+  "finalized": "2026-05-02",
+  "status": "complete_onet_expanded_package_esco_parser_ready",
+  "counts": {
+    "vocabulary_terms": 1061,
+    "aliases": 36230,
+    "role_titles": 24451,
+    "skills_keywords": 106646,
+    "relationships": 39393,
+    "blocked_terms": 12
+  },
+  "notes": [
+    "data folder now contains final expanded data",
+    "data.js rebuilt from final expanded data",
+    "ESCO parser included but ESCO data not bundled due to email/privacy download workflow"
+  ]
+}

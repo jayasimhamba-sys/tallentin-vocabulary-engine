@@ -1,0 +1,15 @@
+{
+  "version": "2.6-esco-email-ready",
+  "finalized": "2026-05-02",
+  "esco_download_email": "projectxtalentin@gmail.com",
+  "status": "esco_download_workflow_documented_email_ready_not_inbox_accessed",
+  "truth_status": "ESCO-ready, not ESCO-bundled until download link/file is provided",
+  "included": [
+    "O*NET-expanded package",
+    "ESCO CSV parser",
+    "ESCO API importer",
+    "ESCO normalizer",
+    "ESCO runbook with email",
+    "ESCO email template"
+  ]
+}

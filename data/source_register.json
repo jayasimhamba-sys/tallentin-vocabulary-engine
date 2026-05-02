@@ -1,0 +1,51 @@
+[
+  {
+    "source": "O*NET Resource Center",
+    "category": "open_taxonomy_backbone",
+    "allowed_use": "Use downloadable database with attribution. Good for occupations, tasks, skills, knowledge, work activities.",
+    "url": "https://www.onetcenter.org/database.html",
+    "risk": "USA-first; validate country meaning for Canada and India."
+  },
+  {
+    "source": "O*NET OnLine License",
+    "category": "license",
+    "allowed_use": "Creative Commons Attribution 4.0 content; copy/adapt with attribution except where noted.",
+    "url": "https://www.onetonline.org/help/license",
+    "risk": "Must preserve attribution and avoid implying endorsement."
+  },
+  {
+    "source": "ESCO Download",
+    "category": "open_taxonomy_backbone",
+    "allowed_use": "Download occupations/skills/competences in CSV, JSON-LD, ODS, RDF, TTL, XML.",
+    "url": "https://esco.ec.europa.eu/en/use-esco/download",
+    "risk": "EU-first; use as reference and map to Canada/India/USA."
+  },
+  {
+    "source": "NAICS Canada/USA",
+    "category": "official_industry_backbone",
+    "allowed_use": "Use for industry, sector, subsector mapping for Canada and USA.",
+    "url": "https://www.statcan.gc.ca/en/subjects/standard/naics/2022/v1/index",
+    "risk": "Industry only; not capability."
+  },
+  {
+    "source": "NIC/NCO India",
+    "category": "official_india_mapping",
+    "allowed_use": "Use for India industry/occupation mapping where available.",
+    "url": "https://www.ncs.gov.in/",
+    "risk": "Version and granularity review needed."
+  },
+  {
+    "source": "LinkedIn",
+    "category": "market_signal_reference_only",
+    "allowed_use": "Use only permitted/manual/licensed reference patterns; do not crawl/copy proprietary graph.",
+    "url": "https://www.linkedin.com/legal/crawling-terms",
+    "risk": "Automated crawling/indexing requires express permission."
+  },
+  {
+    "source": "Indeed",
+    "category": "market_signal_reference_only",
+    "allowed_use": "Use only permitted/manual/licensed reference patterns; do not automate scraping outside allowed tooling.",
+    "url": "https://ca.indeed.com/legal",
+    "risk": "Automation/bots restrictions apply."
+  }
+]

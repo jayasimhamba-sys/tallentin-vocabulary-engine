@@ -1,0 +1,14 @@
+{
+  "version": "2.5-esco-ready",
+  "finalized": "2026-05-02",
+  "status": "onet_expanded_esco_api_and_csv_import_ready",
+  "esco_completion": "official API importer added; manual bulk CSV parser already included; physical ESCO bulk files not bundled because ESCO bulk download requires privacy/email workflow",
+  "new_scripts": [
+    "scripts/fetch_esco_api.py",
+    "scripts/normalize_esco_api.py"
+  ],
+  "notes": [
+    "Use fetch_esco_api.py where API access is available",
+    "Use normalize_esco.py if user manually downloads CSV package"
+  ]
+}

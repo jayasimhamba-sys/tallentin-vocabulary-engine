@@ -1,0 +1,62 @@
+[
+  {
+    "term": "culture_fit",
+    "reason": "Similarity-bias and non-testable subjective language.",
+    "action": "block"
+  },
+  {
+    "term": "rockstar",
+    "reason": "Slang/personality-coded; not a skill or capability.",
+    "action": "block"
+  },
+  {
+    "term": "ninja",
+    "reason": "Slang/culturally loaded; not professional taxonomy language.",
+    "action": "block"
+  },
+  {
+    "term": "guru",
+    "reason": "Cultural/religious sensitivity, especially in India context.",
+    "action": "block"
+  },
+  {
+    "term": "digital_native",
+    "reason": "Age-coded language.",
+    "action": "block"
+  },
+  {
+    "term": "native_english",
+    "reason": "Nationality/language discrimination risk unless legally essential.",
+    "action": "restricted"
+  },
+  {
+    "term": "faang",
+    "reason": "Company/prestige shorthand; not neutral.",
+    "action": "block"
+  },
+  {
+    "term": "big_4",
+    "reason": "Company-group/prestige shorthand; not neutral.",
+    "action": "block"
+  },
+  {
+    "term": "young_dynamic",
+    "reason": "Age-coded; non-testable.",
+    "action": "block"
+  },
+  {
+    "term": "aggressive_personality",
+    "reason": "Gender-coded/vague behavior filter.",
+    "action": "block"
+  },
+  {
+    "term": "executive_presence",
+    "reason": "Class/culture-coded and subjective.",
+    "action": "restricted"
+  },
+  {
+    "term": "polished",
+    "reason": "Class/culture-coded; unclear and subjective.",
+    "action": "restricted"
+  }
+]

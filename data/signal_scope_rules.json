@@ -1,0 +1,27 @@
+[
+  {
+    "rule_id": "R01",
+    "name": "Exact preferred-term match",
+    "logic": "If practitioner preferred_term == signal preferred_term and country/context pass, allow routing."
+  },
+  {
+    "rule_id": "R02",
+    "name": "Alias normalization required",
+    "logic": "Resolve aliases to preferred_term before routing. This belongs in WI-PRAC-C-MATCHING."
+  },
+  {
+    "rule_id": "R03",
+    "name": "Industry + capability both required",
+    "logic": "Industry-only or capability-only match is partial. Full routing requires both unless signal is explicitly cross-industry."
+  },
+  {
+    "rule_id": "R04",
+    "name": "Blocked terms cannot route",
+    "logic": "If input matches blocked_terms, return block/review, not route."
+  },
+  {
+    "rule_id": "R05",
+    "name": "Restricted terms require review",
+    "logic": "If bias_status or regulated_flag is restricted/contextual/yes, require country/legal context."
+  }
+]

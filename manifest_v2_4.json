@@ -1,0 +1,28 @@
+{
+  "version": "2.4_complete",
+  "built": "2026-05-02",
+  "counts": {
+    "final_vocab_terms": 1061,
+    "final_aliases": 36230,
+    "final_role_titles": 24451,
+    "final_skills_keywords": 106646,
+    "final_relationships": 39393,
+    "data_js_mb": 61.49
+  },
+  "included": [
+    "front_page",
+    "generated_onet_merged_data",
+    "json_exports",
+    "csv_exports",
+    "supabase_schema",
+    "supabase_loader_all",
+    "matching_engine_sample",
+    "validation_scripts",
+    "deployment_guide",
+    "source_attribution"
+  ],
+  "not_included": [
+    "bulk_ESCO_dataset_due_download_email_privacy_flow"
+  ],
+  "status": "complete_package_ready_for_review_and_supabase_load"
+}

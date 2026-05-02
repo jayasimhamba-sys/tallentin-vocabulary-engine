@@ -1,0 +1,36 @@
+{
+  "version": "2.3_actual_onet_import",
+  "built": "2026-05-02",
+  "purpose": "Ingestion-ready package for importing O*NET and ESCO into TALLENTIN vocabulary data model.",
+  "raw_data_folders": {
+    "onet": "raw_data/onet",
+    "esco": "raw_data/esco"
+  },
+  "generated_outputs": "generated",
+  "run_order": [
+    "python scripts/validate_seed.py",
+    "python scripts/normalize_onet.py --input raw_data/onet --output generated/onet_normalized.json",
+    "python scripts/normalize_esco.py --input raw_data/esco --output generated/esco_normalized.json",
+    "python scripts/merge_vocab.py --seed data/vocab_terms.json --onet generated/onet_normalized.json --esco generated/esco_normalized.json --output generated/tallentin_vocab_merged.json",
+    "python scripts/build_data_js.py --input generated/tallentin_vocab_merged.json --output data.js",
+    "python scripts/validate_generated.py --input generated/tallentin_vocab_merged.json"
+  ],
+  "legal_position": "Use O*NET and ESCO as open taxonomy backbone with attribution. Use LinkedIn/Indeed/Glassdoor/ZipRecruiter/ATS pages only as market-signal references unless licensed or permissioned.",
+  "completed_actions": [
+    "Downloaded O*NET text files individually from official O*NET Resource Center paths",
+    "Placed O*NET files into raw_data/onet",
+    "Ran seed validation",
+    "Ran O*NET normalization",
+    "Merged O*NET normalized data into TALLENTIN seed",
+    "Validated generated merged vocabulary",
+    "Rebuilt data.js for the finder UI"
+  ],
+  "actual_import_counts": {
+    "onet_occupations_imported": 1016,
+    "onet_aliases_extracted": 36000,
+    "onet_roles_extracted": 24219,
+    "onet_skills_extracted": 109460,
+    "merged_terms_total": 1061
+  },
+  "esco_status": "Not bulk-downloaded in this run because ESCO download workflow redirects to privacy statement and email delivery. ESCO parser and API/download instructions remain in package."
+}

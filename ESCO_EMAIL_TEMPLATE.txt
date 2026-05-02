@@ -1,0 +1,22 @@
+Subject: ESCO classification download request / confirmation
+
+Use this email address for ESCO download confirmation:
+
+projectxtalentin@gmail.com
+
+Purpose:
+TALLENTIN Vocabulary Engine is using ESCO as an open/reference taxonomy source for occupation, skill, competence, and occupation-skill relationship mapping.
+
+Requested package:
+- English CSV package where available
+- Occupations
+- Skills / competences
+- Occupation-skill relationships
+- Skill hierarchy / relationship files where available
+
+After receiving the download link:
+1. Download the ESCO package.
+2. Extract it.
+3. Copy CSV files into:
+   raw_data/esco/
+4. Run the commands in ESCO_COMPLETION.md.

@@ -1,0 +1,30 @@
+[
+  {
+    "term": "contractor",
+    "Canada": "Independent contractor, incorporated consultant, or temporary contract worker.",
+    "India": "Contract employee, vendor resource, consultant, or third-party payroll worker.",
+    "USA": "1099 contractor, W2 contractor, consultant, or staffing-agency worker.",
+    "recommendation": "Store as employment_model, not capability."
+  },
+  {
+    "term": "engineer",
+    "Canada": "May be regulated in professional engineering contexts; broad in software contexts.",
+    "India": "Often broad for software/technical roles and formal engineering backgrounds.",
+    "USA": "Broad in software; licensed engineering exists in regulated contexts.",
+    "recommendation": "Use regulated_flag and industry context."
+  },
+  {
+    "term": "talent_acquisition",
+    "Canada": "Common corporate HR/recruiting language.",
+    "India": "Common in IT services, GCC, staffing, RPO, and corporate HR.",
+    "USA": "Common in corporate and agency recruiting.",
+    "recommendation": "Safe preferred capability with recruiting aliases."
+  },
+  {
+    "term": "quality_assurance",
+    "Canada": "Used in software, manufacturing, construction, healthcare, services.",
+    "India": "Common in IT/software, manufacturing, BPO, pharma, services.",
+    "USA": "Common across software, manufacturing, healthcare, regulated sectors.",
+    "recommendation": "Always pair with industry context."
+  }
+]

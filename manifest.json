@@ -1,0 +1,14 @@
+{
+  "version": "2.1",
+  "built": "2026-05-02",
+  "counts": {
+    "terms": 45,
+    "skills_keywords": 924,
+    "role_aliases": 232,
+    "aliases": 230,
+    "relationships": 345,
+    "blocked_terms": 12
+  },
+  "status": "realistic_seed_package_not_full_onet_esco_import",
+  "next_step": "ingest O*NET and ESCO datasets into Supabase"
+}
