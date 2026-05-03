@@ -1,15 +1,485 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>TALLENTIN V2.1 Vocabulary Finder</title>
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TALLENTIN Vocabulary Finder V3</title>
 <style>
-:root{--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--card:#fff;--blue:#2563eb;--blue2:#dbeafe;--green:#059669;--green2:#d1fae5;--amber:#d97706;--amber2:#fef3c7;--red:#dc2626;--red2:#fee2e2;--dark:#0f172a;--shadow:0 18px 55px rgba(15,23,42,.08);--r:24px}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,#eaf2ff 0,#f8fafc 40%,#fff 100%);color:var(--ink)}.wrap{max-width:1240px;margin:auto;padding:30px 18px 70px}.hero{text-align:center;padding:36px 0 20px}.logo{display:inline-flex;padding:8px 13px;border:1px solid var(--line);background:white;border-radius:999px;box-shadow:var(--shadow);font-weight:900;color:var(--muted);font-size:13px}h1{font-size:clamp(34px,5vw,64px);line-height:1;letter-spacing:-.055em;margin:18px 0 12px}.hero p{max-width:880px;margin:auto;color:var(--muted);line-height:1.65;font-size:17px}.search-card{background:rgba(255,255,255,.94);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:32px;padding:18px;margin:20px auto;max-width:1000px}.search-row{display:grid;grid-template-columns:1fr 150px;gap:10px}input{height:60px;border:1px solid var(--line);border-radius:22px;padding:0 20px;font-size:18px;outline:none}input:focus{border-color:#93c5fd;box-shadow:0 0 0 5px rgba(37,99,235,.1)}button{border:0;cursor:pointer;border-radius:22px;font-weight:950}.primary{background:var(--dark);color:white;font-size:16px}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.chip{padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:#f8fafc;color:#334155;font-weight:850;font-size:13px;cursor:pointer}.chip:hover{background:var(--blue2);color:var(--blue);border-color:#bfdbfe}.counts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}.grid{display:grid;grid-template-columns:1fr 370px;gap:18px;align-items:start}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px;margin-bottom:18px}.empty{text-align:center;padding:50px 20px;color:var(--muted)}.empty .big{font-size:56px}.badge{display:inline-flex;padding:6px 10px;border-radius:999px;border:1px solid var(--line);font-size:12px;font-weight:950;align-items:center}.good{background:var(--green2);color:var(--green);border-color:#a7f3d0}.blue{background:var(--blue2);color:var(--blue);border-color:#bfdbfe}.warn{background:var(--amber2);color:var(--amber);border-color:#fde68a}.bad{background:var(--red2);color:var(--red);border-color:#fecaca}.neutral{background:#f1f5f9;color:#475569}.title-row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.id{font-size:12px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;font-weight:950}.title-row h2{font-size:38px;letter-spacing:-.04em;margin:4px 0 8px}.meta{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.answer{margin-top:15px;background:#f8fafc;border:1px solid var(--line);border-radius:22px;padding:18px;font-size:18px;color:#334155;line-height:1.65}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px;font-weight:950}.tab.active{background:var(--dark);color:#fff}.panel{display:none}.panel.active{display:block}.list{display:flex;flex-wrap:wrap;gap:8px}.pill{background:#f8fafc;border:1px solid var(--line);border-radius:999px;padding:8px 11px;font-size:13px;font-weight:850;color:#334155;cursor:pointer}.pill:hover{background:#eff6ff}.cluster{border:1px solid var(--line);background:#fbfdff;border-radius:20px;padding:15px;margin-bottom:12px}.cluster h4{text-transform:capitalize;margin:0 0 10px}.kv{display:grid;grid-template-columns:115px 1fr;gap:10px;border-top:1px solid #f1f5f9;padding:12px 0}.kv:first-child{border:0}.k{text-transform:uppercase;letter-spacing:.06em;font-size:11px;color:var(--muted);font-weight:950}.v{color:#334155;line-height:1.55}.note{padding:15px;border-radius:18px;line-height:1.55}.note.good{background:var(--green2);border:1px solid #a7f3d0;color:#065f46}.note.warn{background:var(--amber2);border:1px solid #fde68a;color:#92400e}.side-title{font-weight:950;margin:0 0 10px}.small{font-size:13px;color:var(--muted);line-height:1.55}.result{border:1px solid var(--line);background:white;border-radius:18px;padding:13px;margin-bottom:9px;cursor:pointer}.result:hover{background:#f8fafc}.result small{display:block;color:var(--muted);margin-top:5px}.match-list{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.source-row{border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:10px;background:#fff}.footer{text-align:center;color:var(--muted);font-size:13px;line-height:1.6;margin-top:20px}@media(max-width:900px){.grid{grid-template-columns:1fr}.search-row{grid-template-columns:1fr}.title-row{flex-direction:column}.meta{justify-content:flex-start}.kv{grid-template-columns:1fr}.match-list{grid-template-columns:1fr}}
-</style></head>
-<body><div class="wrap"><section class="hero"><div class="logo">🧭 TALLENTIN V2.1 Dataset-Backed Finder</div><h1>Search roles, skills, industries, and capabilities.</h1><p>A cleaner front page with a larger realistic seed. The final production step is to load full O*NET + ESCO datasets into Supabase and continue validation through practitioners.</p></section>
-<section class="search-card"><div class="search-row"><input id="q" placeholder="Try: talent acquisition, SQL, project manager, risk, cybersecurity, construction..." autofocus/><button class="primary" onclick="runSearch()">Search</button></div><div id="chips" class="chips"></div><div id="counts" class="counts"></div></section>
-<main class="grid"><section id="answer"></section><aside id="side"></aside></main><div class="footer">Safe-source rule: open/government taxonomies are backbone; LinkedIn, Indeed, Glassdoor, ZipRecruiter, ATS pages, and company pages are market-signal references only unless licensed or permissioned.</div></div>
+:root{
+  --ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--soft:#f8fafc;--card:#fff;
+  --blue:#2563eb;--blue2:#dbeafe;--green:#059669;--green2:#d1fae5;
+  --amber:#d97706;--amber2:#fef3c7;--red:#dc2626;--red2:#fee2e2;
+  --purple:#7c3aed;--purple2:#ede9fe;--dark:#111827;
+  --shadow:0 18px 55px rgba(15,23,42,.08);--r:24px
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:radial-gradient(circle at top left,#eaf2ff 0,#f8fafc 36%,#fff 100%);
+  color:var(--ink)
+}
+.wrap{max-width:1240px;margin:auto;padding:24px 18px 72px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:950;letter-spacing:-.02em}
+.brand-mark{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#7c3aed);display:grid;place-items:center;color:white;box-shadow:var(--shadow)}
+.mode-toggle{display:flex;gap:8px;background:white;border:1px solid var(--line);border-radius:999px;padding:6px;box-shadow:0 8px 30px rgba(15,23,42,.05)}
+.mode-btn{border:0;background:transparent;border-radius:999px;padding:9px 13px;font-weight:900;cursor:pointer;color:#334155}
+.mode-btn.active{background:var(--dark);color:#fff}
+.hero{text-align:center;padding:30px 0 18px}
+.version-pill{display:inline-flex;gap:7px;align-items:center;padding:8px 13px;border:1px solid var(--line);background:white;border-radius:999px;box-shadow:var(--shadow);font-weight:900;color:var(--muted);font-size:13px}
+h1{font-size:clamp(34px,5vw,62px);line-height:1.02;letter-spacing:-.055em;margin:18px auto 12px;max-width:980px}
+.hero p{max-width:880px;margin:auto;color:var(--muted);line-height:1.65;font-size:17px}
+.search-card{position:relative;background:rgba(255,255,255,.96);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:32px;padding:18px;margin:20px auto;max-width:1040px}
+.search-row{display:grid;grid-template-columns:1fr 150px;gap:10px}
+input,select{font-family:inherit}
+#q{height:62px;border:1px solid var(--line);border-radius:22px;padding:0 20px;font-size:18px;outline:none;background:white}
+#q:focus{border-color:#93c5fd;box-shadow:0 0 0 5px rgba(37,99,235,.1)}
+button{border:0;cursor:pointer;border-radius:22px;font-weight:950;font-family:inherit}
+.primary{background:var(--dark);color:white;font-size:16px}
+.secondary{border:1px solid var(--line);background:white;color:var(--ink);padding:10px 12px}
+.secondary:hover{background:#f8fafc}
+.suggestions{display:none;position:absolute;left:18px;right:178px;top:90px;background:white;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);z-index:20;max-height:390px;overflow:auto;padding:12px}
+.suggestions.show{display:block}
+.suggest-group{margin-bottom:10px}
+.suggest-title{text-transform:uppercase;letter-spacing:.08em;font-size:11px;color:var(--muted);font-weight:950;margin:6px 8px}
+.suggest-item{display:flex;justify-content:space-between;gap:10px;padding:10px;border-radius:14px;cursor:pointer}
+.suggest-item:hover{background:#eff6ff}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip,.pill{padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:#f8fafc;color:#334155;font-weight:850;font-size:13px;cursor:pointer}
+.chip:hover,.pill:hover{background:var(--blue2);color:var(--blue);border-color:#bfdbfe}
+.counts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
+.badge{display:inline-flex;padding:6px 10px;border-radius:999px;border:1px solid var(--line);font-size:12px;font-weight:950;align-items:center}
+.good{background:var(--green2);color:var(--green);border-color:#a7f3d0}
+.blue{background:var(--blue2);color:var(--blue);border-color:#bfdbfe}
+.warn{background:var(--amber2);color:var(--amber);border-color:#fde68a}
+.bad{background:var(--red2);color:var(--red);border-color:#fecaca}
+.purple{background:var(--purple2);color:var(--purple);border-color:#ddd6fe}
+.neutral{background:#f1f5f9;color:#475569}
+.grid{display:grid;grid-template-columns:1fr 365px;gap:18px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px;margin-bottom:18px}
+.empty{text-align:center;padding:50px 20px;color:var(--muted)}
+.empty .big{font-size:56px}
+.interpret{background:#0f172a;color:white;border-radius:24px;padding:16px 18px;margin-bottom:18px;box-shadow:var(--shadow)}
+.interpret h3{margin:0 0 8px;font-size:15px;color:#bfdbfe}
+.interpret .parts{display:flex;flex-wrap:wrap;gap:8px}
+.interpret .part{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:8px 10px;border-radius:999px;font-size:13px;font-weight:850}
+.title-row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.id{font-size:12px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;font-weight:950}
+.title-row h2{font-size:38px;letter-spacing:-.04em;margin:4px 0 8px}
+.meta{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.answer{margin-top:15px;background:#f8fafc;border:1px solid var(--line);border-radius:22px;padding:18px;font-size:18px;color:#334155;line-height:1.65}
+.action-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:13px;font-weight:950}
+.tab.active{background:var(--dark);color:#fff}
+.panel{display:none}
+.panel.active{display:block}
+.list{display:flex;flex-wrap:wrap;gap:8px}
+.cluster{border:1px solid var(--line);background:#fbfdff;border-radius:20px;padding:15px;margin-bottom:12px}
+.cluster h4{text-transform:capitalize;margin:0 0 10px}
+.kv{display:grid;grid-template-columns:128px 1fr;gap:10px;border-top:1px solid #f1f5f9;padding:12px 0}
+.kv:first-child{border:0}
+.k{text-transform:uppercase;letter-spacing:.06em;font-size:11px;color:var(--muted);font-weight:950}
+.v{color:#334155;line-height:1.55}
+.note{padding:15px;border-radius:18px;line-height:1.55}
+.note.good{background:var(--green2);border:1px solid #a7f3d0;color:#065f46}
+.note.warn{background:var(--amber2);border:1px solid #fde68a;color:#92400e}
+.note.blue{background:var(--blue2);border:1px solid #bfdbfe;color:#1d4ed8}
+.side-title{font-weight:950;margin:0 0 10px}
+.small{font-size:13px;color:var(--muted);line-height:1.55}
+.result{border:1px solid var(--line);background:white;border-radius:18px;padding:13px;margin-bottom:9px;cursor:pointer}
+.result:hover{background:#f8fafc}
+.result small{display:block;color:var(--muted);margin-top:5px}
+.compare-box{display:none}
+.compare-box.show{display:block}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.compare-card{border:1px solid var(--line);border-radius:18px;padding:14px;background:#fbfdff}
+.footer{text-align:center;color:var(--muted);font-size:13px;line-height:1.6;margin-top:20px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111827;color:white;padding:12px 16px;border-radius:999px;box-shadow:var(--shadow);display:none;z-index:50;font-weight:850}
+.toast.show{display:block}
+@media(max-width:900px){
+  .grid,.two-col,.compare-grid{grid-template-columns:1fr}
+  .search-row{grid-template-columns:1fr}
+  .suggestions{left:18px;right:18px;top:154px}
+  .title-row{flex-direction:column}
+  .meta{justify-content:flex-start}
+  .kv{grid-template-columns:1fr}
+  .topbar{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand"><div class="brand-mark">T</div><div>TALLENTIN Vocabulary Finder</div></div>
+    <div class="mode-toggle" aria-label="Mode toggle">
+      <button class="mode-btn active" id="simpleBtn" onclick="setMode('simple')">Simple Mode</button>
+      <button class="mode-btn" id="explorerBtn" onclick="setMode('explorer')">Explorer Mode</button>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="version-pill">🧭 V3 Guided Vocabulary Assistant</div>
+    <h1>Turn messy hiring language into clear structured terms.</h1>
+    <p>Search industries, capabilities, roles, skills, aliases, and routing intelligence across Canada, India, and the USA.</p>
+  </section>
+
+  <section class="search-card">
+    <div class="search-row">
+      <input id="q" placeholder='Try “construction recruiter Canada”, “SQL”, “talent acquisition”, or “AI engineer”' autocomplete="off"/>
+      <button class="primary" onclick="runSearch()">Find term</button>
+    </div>
+    <div id="suggestions" class="suggestions"></div>
+    <div id="chips" class="chips"></div>
+    <div id="recent" class="chips"></div>
+    <div id="counts" class="counts"></div>
+  </section>
+
+  <main class="grid">
+    <section id="answer"></section>
+    <aside id="side"></aside>
+  </main>
+
+  <div class="footer">
+    Safe-source rule: open/government taxonomies are backbone; job boards, professional networks, ATS pages, and company pages are market-signal references only unless licensed or permissioned. Canada, India, and the USA are equal-priority markets.
+  </div>
+</div>
+
+<div class="toast" id="toast">Copied</div>
+
 <script src="data.js"></script>
 <script>
-const D=window.TALLENTIN_DATA;const terms=D["vocab_terms.json"],aliases=D["aliases.json"],roles=D["role_titles.json"],skills=D["skills.json"],sources=D["source_register.json"],blocked=D["blocked_terms.json"];const index={};function add(k,v){if(k&&!index[k.toLowerCase()])index[k.toLowerCase()]=v}terms.forEach(t=>{add(t.term,t);add(t.label,t);(t.aliases||[]).forEach(a=>add(a,t));(t.roles||[]).forEach(r=>add(r,t));(t.skills||[]).forEach(s=>add(s,t))});function badge(text,t='neutral'){return`<span class="badge ${t}">${text}</span>`}function tone(v,type){if(type==='evidence')return v==='official_verified'?'good':v==='open_taxonomy_supported'?'blue':v==='market_observed'?'warn':'neutral';if(type==='bias')return v==='pass'?'good':v==='blocked'?'bad':'warn';if(type==='status')return v==='verified'?'good':v==='weak'?'warn':v==='restricted'?'warn':'neutral';return'neutral'}function setQuery(q){document.getElementById('q').value=q;runSearch()}function renderMeta(){const q=['talent acquisition','SQL','project manager','risk management','quality assurance','data engineering','cybersecurity','financial services','construction','contractor','Power BI','API design','employee relations','privacy'];document.getElementById('chips').innerHTML=q.map(x=>`<span class="chip" onclick="setQuery('${x}')">${x}</span>`).join('');document.getElementById('counts').innerHTML=badge(terms.length+' terms','blue')+badge(skills.length+' skills/keywords','neutral')+badge(roles.length+' role aliases','neutral')+badge(aliases.length+' aliases','neutral')+badge(blocked.length+' blocked terms','warn')}function runSearch(){const q=document.getElementById('q').value.trim().toLowerCase();if(!q){renderEmpty();return}let hit=index[q];if(!hit){hit=terms.find(t=>(t.term+' '+t.label+' '+t.definition+' '+(t.aliases||[]).join(' ')+' '+(t.roles||[]).join(' ')+' '+(t.skills||[]).join(' ')).toLowerCase().includes(q))}if(hit){renderAnswer(hit);renderSide(hit)}else renderNoMatch(q)}function renderEmpty(){document.getElementById('answer').innerHTML=`<div class="card empty"><div class="big">🔎</div><h2>Search the vocabulary</h2><p>Try a role, skill, industry, alias, or capability. Example: SQL, recruiter, QA, construction, risk management.</p></div>`;document.getElementById('side').innerHTML=`<div class="card"><h3 class="side-title">What this gives you</h3><p class="small">Meaning, type, aliases, roles, skills, country notes, routing guidance, and evidence level.</p></div><div class="card"><h3 class="side-title">Source model</h3>${sources.slice(0,4).map(s=>`<div class="source-row"><b>${s.source}</b><br><span class="small">${s.allowed_use}</span></div>`).join('')}</div>`}function renderNoMatch(q){const rel=terms.filter(t=>(t.label+' '+t.term+' '+(t.aliases||[]).join(' ')+' '+(t.roles||[]).join(' ')+' '+(t.skills||[]).join(' ')).toLowerCase().includes(q.split(' ')[0])).slice(0,8);document.getElementById('answer').innerHTML=`<div class="card empty"><div class="big">🟡</div><h2>No exact match found</h2><p>“${q}” should be logged as a raw requested term and reviewed before official use.</p>${rel.length?`<div class="match-list">${rel.map(t=>`<div class="result" onclick="setQuery('${t.label}')"><b>${t.label}</b><small>${t.dimension} · ${t.status}</small></div>`).join('')}</div>`:''}</div>`;document.getElementById('side').innerHTML=`<div class="card"><h3>Recommended action</h3><div class="note warn"><b>Add to review queue:</b> check whether this is an alias, new term, skill, role, tool, certification, or blocked term.</div></div>`}function clusters(t){return Object.entries(t.skillClusters||{}).map(([c,vals])=>`<div class="cluster"><h4>${c.replaceAll('_',' ')}</h4><div class="list">${vals.map(s=>`<span class="pill" onclick="setQuery('${String(s).replaceAll("'","")}')">${s}</span>`).join('')}</div></div>`).join('')}function renderAnswer(t){document.getElementById('answer').innerHTML=`<div class="card"><div class="title-row"><div><div class="id">${t.id}</div><h2>${t.label}</h2></div><div class="meta">${badge(t.dimension,'blue')}${badge(t.status,tone(t.status,'status'))}${badge(t.evidence,tone(t.evidence,'evidence'))}${badge('bias: '+t.bias,tone(t.bias,'bias'))}${badge('confidence '+t.confidence+'/5')}</div></div><div class="answer">${t.simple}</div></div><div class="card"><div class="tabs"><button class="tab active" onclick="showPanel('overview')">Overview</button><button class="tab" onclick="showPanel('skills')">Skills / Keywords</button><button class="tab" onclick="showPanel('roles')">Roles</button><button class="tab" onclick="showPanel('country')">Country</button><button class="tab" onclick="showPanel('routing')">Routing</button></div><div id="overview" class="panel active"><h3>Includes</h3><div class="list">${(t.includes||[]).map(x=>`<span class="pill">${x}</span>`).join('')}</div><br><h3>Excludes</h3><div class="list">${(t.excludes||[]).map(x=>`<span class="pill">${x}</span>`).join('')}</div><br><h3>Aliases</h3><div class="list">${(t.aliases||[]).map(x=>`<span class="pill" onclick="setQuery('${String(x).replaceAll("'","")}')">${x}</span>`).join('')}</div></div><div id="skills" class="panel"><h3>Skills and keyword clusters</h3>${clusters(t)}</div><div id="roles" class="panel"><h3>Connected role titles / aliases</h3><div class="list">${(t.roles||[]).map(x=>`<span class="pill" onclick="setQuery('${String(x).replaceAll("'","")}')">${x}</span>`).join('')}</div></div><div id="country" class="panel"><h3>Country meaning</h3><div class="kv"><div class="k">Canada</div><div class="v">${t.country?.Canada||''}</div></div><div class="kv"><div class="k">India</div><div class="v">${t.country?.India||''}</div></div><div class="kv"><div class="k">USA</div><div class="v">${t.country?.USA||''}</div></div></div><div id="routing" class="panel"><h3>Routing answer</h3><div class="note ${t.status==='verified'&&t.bias==='pass'?'good':'warn'}">${t.routing}</div><br><h3>Why this term exists</h3><p>${t.problem}</p></div></div>`}function showPanel(id){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}function renderSide(t){const rel=terms.filter(x=>x.id!==t.id&&(x.dimension===t.dimension||x.parent===t.parent)).slice(0,6);document.getElementById('side').innerHTML=`<div class="card"><h3 class="side-title">Quick summary</h3><div class="kv"><div class="k">Type</div><div class="v">${t.dimension}</div></div><div class="kv"><div class="k">Parent</div><div class="v">${t.parent}</div></div><div class="kv"><div class="k">Regulated</div><div class="v">${t.regulated}</div></div></div><div class="card"><h3 class="side-title">Do not confuse with</h3><div class="list">${(t.doNotConfuse||[]).map(x=>`<span class="pill" onclick="setQuery('${String(x).replaceAll("'","")}')">${x}</span>`).join('')}</div></div><div class="card"><h3 class="side-title">Related terms</h3>${rel.map(r=>`<div class="result" onclick="setQuery('${r.label}')"><b>${r.label}</b><small>${r.dimension} · ${r.status}</small></div>`).join('')}</div>`}document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')runSearch()});renderMeta();renderEmpty();
-</script></body></html>
+const D = window.TALLENTIN_DATA || {};
+const terms = D["vocab_terms.json"] || [];
+const aliases = D["aliases.json"] || [];
+const roles = D["role_titles.json"] || [];
+const skills = D["skills.json"] || [];
+const sources = D["source_register.json"] || [];
+const blocked = D["blocked_terms.json"] || [];
+let currentMode = "simple";
+let currentTerm = null;
+
+const index = {};
+function norm(s){return String(s||"").toLowerCase().trim()}
+function add(k,v,kind){ if(k){ const key=norm(k); if(!index[key]) index[key]={term:v,kind,raw:k}; } }
+terms.forEach(t=>{
+  add(t.term,t,"preferred term"); add(t.label,t,"preferred term");
+  (t.aliases||[]).forEach(a=>add(a,t,"alias"));
+  (t.roles||[]).forEach(r=>add(r,t,"role"));
+  (t.skills||[]).forEach(s=>add(s,t,"skill"));
+});
+aliases.forEach(a=>{
+  const t = terms.find(x=>x.term===a.preferred_term);
+  if(t) add(a.alias,t,"alias");
+});
+roles.forEach(r=>{
+  const t = terms.find(x=>x.term===r.mapped_term);
+  if(t) add(r.role_title,t,"role");
+});
+skills.forEach(s=>{
+  const t = terms.find(x=>x.term===s.mapped_term);
+  if(t) add(s.skill_name,t,"skill");
+});
+
+function badge(text,t='neutral'){return `<span class="badge ${t}">${escapeHtml(text)}</span>`}
+function tone(v,type){
+  if(type==='evidence') return String(v).includes('official')?'good':String(v).includes('open')?'blue':String(v).includes('market')?'warn':'neutral';
+  if(type==='bias') return v==='pass'?'good':v==='blocked'?'bad':'warn';
+  if(type==='status') return ['verified','practitioner_verified','platform_verified','mature'].includes(v)?'good':['weak','weak_verified','observed','patterned'].includes(v)?'warn':v==='restricted'?'warn':'neutral';
+  return 'neutral';
+}
+function friendlyStatus(v){
+  const map={verified:"Verified",open_taxonomy_supported:"Open-source supported",official_verified:"Official-source verified",weak_verified:"Weak verified",practitioner_verified:"Practitioner verified",platform_verified:"Platform verified",mature:"Mature",observed:"Observed",patterned:"Patterned",restricted:"Restricted",pass:"Bias check passed"};
+  return map[v] || String(v||"Not available").replaceAll("_"," ");
+}
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+function setMode(mode){
+  currentMode=mode;
+  document.getElementById("simpleBtn").classList.toggle("active",mode==="simple");
+  document.getElementById("explorerBtn").classList.toggle("active",mode==="explorer");
+  if(currentTerm){ renderAnswer(currentTerm); renderSide(currentTerm); }
+}
+function showToast(msg="Copied"){
+  const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"),1500);
+}
+function saveRecent(q){
+  if(!q) return;
+  let arr=JSON.parse(localStorage.getItem("tallentin_recent")||"[]");
+  arr=[q,...arr.filter(x=>norm(x)!==norm(q))].slice(0,6);
+  localStorage.setItem("tallentin_recent",JSON.stringify(arr));
+  renderRecent();
+}
+function renderRecent(){
+  let arr=JSON.parse(localStorage.getItem("tallentin_recent")||"[]");
+  document.getElementById("recent").innerHTML = arr.length ? `<span class="small" style="align-self:center;font-weight:900">Recent:</span>` + arr.map(x=>`<span class="chip" onclick="setQuery('${escapeAttr(x)}')">${escapeHtml(x)}</span>`).join("") : "";
+}
+function escapeAttr(s){return String(s||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,"&quot;")}
+
+function setQuery(q){document.getElementById("q").value=q; hideSuggestions(); runSearch();}
+function renderMeta(){
+  const q=['talent acquisition','AI engineer','construction recruiter Canada','SQL','project manager','cybersecurity','quality assurance','data engineer','risk management','contractor','EV battery engineer','space mission operations'];
+  document.getElementById('chips').innerHTML=q.map(x=>`<span class="chip" onclick="setQuery('${escapeAttr(x)}')">${escapeHtml(x)}</span>`).join('');
+  document.getElementById('counts').innerHTML=badge(terms.length+' terms','blue')+badge(skills.length+' skills/keywords','neutral')+badge(roles.length+' role aliases','neutral')+badge(aliases.length+' aliases','neutral')+badge(blocked.length+' blocked terms','warn');
+  renderRecent();
+}
+
+function allText(t){return norm([t.term,t.label,t.definition,t.simple,(t.aliases||[]).join(" "),(t.roles||[]).join(" "),(t.skills||[]).join(" "),t.dimension,t.parent].join(" "))}
+function scoreTerm(t,q){
+  const nq=norm(q), label=norm(t.label), term=norm(t.term);
+  if(label===nq || term===nq) return 100;
+  if((t.aliases||[]).some(a=>norm(a)===nq)) return 94;
+  if((t.roles||[]).some(r=>norm(r)===nq)) return 90;
+  if((t.skills||[]).some(s=>norm(s)===nq)) return 86;
+  let score=0;
+  const tokens=nq.split(/\s+/).filter(Boolean);
+  const txt=allText(t);
+  tokens.forEach(tok=>{ if(txt.includes(tok)) score+=10; if(label.includes(tok)) score+=8; });
+  if(txt.includes(nq)) score+=35;
+  return score;
+}
+function findBest(q){
+  const nq=norm(q);
+  if(index[nq]) return {term:index[nq].term, kind:index[nq].kind, confidence:100};
+  const scored=terms.map(t=>({term:t,score:scoreTerm(t,q)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
+  if(scored.length) return {term:scored[0].term, kind:"best match", confidence:scored[0].score};
+  return null;
+}
+function suggestionsFor(q){
+  const nq=norm(q); if(nq.length<2) return [];
+  return terms.map(t=>({term:t,score:scoreTerm(t,nq)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,12);
+}
+function showSuggestions(){
+  const q=document.getElementById("q").value;
+  const list=suggestionsFor(q);
+  const box=document.getElementById("suggestions");
+  if(!list.length){ hideSuggestions(); return; }
+  const groups={Capability:[],Role:[],Industry:[],Skill:[],Other:[]};
+  list.forEach(x=>{
+    const d=String(x.term.dimension||"").toLowerCase();
+    if(d.includes("capability")) groups.Capability.push(x);
+    else if(d.includes("role")) groups.Role.push(x);
+    else if(d.includes("industry")||d.includes("sector")) groups.Industry.push(x);
+    else if(d.includes("skill")) groups.Skill.push(x);
+    else groups.Other.push(x);
+  });
+  box.innerHTML = Object.entries(groups).filter(([_,arr])=>arr.length).map(([g,arr])=>`
+    <div class="suggest-group"><div class="suggest-title">${g}</div>
+    ${arr.slice(0,5).map(x=>`<div class="suggest-item" onclick="setQuery('${escapeAttr(x.term.label)}')"><b>${escapeHtml(x.term.label)}</b><span class="small">${escapeHtml(friendlyStatus(x.term.status))}</span></div>`).join("")}
+    </div>`).join("");
+  box.classList.add("show");
+}
+function hideSuggestions(){document.getElementById("suggestions").classList.remove("show")}
+
+function interpretQuery(q,hit){
+  const parts=[];
+  const lower=norm(q);
+  ["Canada","India","USA"].forEach(c=>{ if(lower.includes(c.toLowerCase())) parts.push(["Country",c]); });
+  const industryWords=["construction","banking","financial","healthcare","retail","manufacturing","space","crypto","cybersecurity","data centre","data center","ev","battery","ai infrastructure"];
+  industryWords.forEach(w=>{ if(lower.includes(w)) parts.push(["Industry / sector",w]); });
+  if(hit){
+    const d=hit.dimension || "term";
+    parts.push(["Best matched "+String(d).replaceAll("_"," "), hit.label]);
+  }
+  if(lower.includes("engineer")||lower.includes("manager")||lower.includes("analyst")||lower.includes("recruiter")||lower.includes("technician")) parts.push(["Role signal","Detected role/title language"]);
+  if(!parts.length && hit) parts.push(["Best interpretation", hit.label]);
+  return parts;
+}
+function renderInterpret(q,t){
+  const parts=interpretQuery(q,t);
+  if(!parts.length) return "";
+  return `<div class="interpret"><h3>We interpreted your search as</h3><div class="parts">${parts.map(([k,v])=>`<span class="part">${escapeHtml(k)}: ${escapeHtml(v)}</span>`).join("")}</div></div>`;
+}
+function runSearch(){
+  const q=document.getElementById('q').value.trim();
+  hideSuggestions();
+  if(!q){ renderEmpty(); return; }
+  saveRecent(q);
+  const found=findBest(q);
+  if(found){ currentTerm=found.term; renderAnswer(found.term,q,found); renderSide(found.term); }
+  else { currentTerm=null; renderNoMatch(q); }
+}
+function plainMeaning(t){return t.simple || t.plain_meaning || t.definition || "No plain meaning available yet."}
+function useWhen(t){
+  const inc=t.includes||[];
+  return inc.length ? inc : ["The work matches this term’s definition and context."];
+}
+function doNotUseWhen(t){
+  const exc=t.excludes||t.doNotConfuse||[];
+  return exc.length ? exc : ["The work belongs to a different capability, role, skill, or industry context."];
+}
+function aiImpact(t){
+  const label=norm(t.label+" "+t.term+" "+t.parent+" "+t.dimension);
+  if(label.includes("ai")||label.includes("data science")||label.includes("software")||label.includes("cyber")||label.includes("talent")||label.includes("recruit")||label.includes("data")){
+    return {
+      exposure: label.includes("talent")||label.includes("recruit")||label.includes("ai")||label.includes("data") ? "High" : "Medium",
+      summary: "AI may change task execution, evidence review, automation support, and skill expectations. Human validation remains required before using AI-impact labels for routing."
+    };
+  }
+  return {exposure:"Contextual",summary:"AI impact should be reviewed at task level before making role-risk claims."};
+}
+function renderAnswer(t,q="",found=null){
+  const mode=currentMode;
+  const impact=aiImpact(t);
+  const simple = mode==="simple";
+  document.getElementById('answer').innerHTML = `
+    ${q ? renderInterpret(q,t) : ""}
+    <div class="card">
+      <div class="title-row">
+        <div>
+          <div class="id">Best match · ${escapeHtml(t.id||"")}</div>
+          <h2>${escapeHtml(t.label)}</h2>
+        </div>
+        <div class="meta">
+          ${badge(friendlyStatus(t.dimension),'blue')}
+          ${badge(friendlyStatus(t.status),tone(t.status,'status'))}
+          ${badge(friendlyStatus(t.evidence),tone(t.evidence,'evidence'))}
+          ${badge(friendlyStatus(t.bias),tone(t.bias,'bias'))}
+          ${badge('Confidence: '+(Number(t.confidence||t.source_confidence_score||4)>=4?'High':(t.confidence||'Review')),'neutral')}
+        </div>
+      </div>
+      <div class="answer"><b>Plain meaning:</b><br>${escapeHtml(plainMeaning(t))}</div>
+      <div class="two-col" style="margin-top:16px">
+        <div class="note good"><b>Use this term when</b><br>${useWhen(t).slice(0,4).map(x=>"• "+escapeHtml(x)).join("<br>")}</div>
+        <div class="note warn"><b>Do not use this term when</b><br>${doNotUseWhen(t).slice(0,4).map(x=>"• "+escapeHtml(x)).join("<br>")}</div>
+      </div>
+      <div class="action-row">
+        <button class="secondary" onclick="startCompare()">Compare terms</button>
+        <button class="secondary" onclick="copySummary()">Copy summary</button>
+        <button class="secondary" onclick="scrollToTabs()">Explore related</button>
+      </div>
+    </div>
+
+    <div class="card compare-box" id="compareBox">
+      <h3>Compare terms</h3>
+      <p class="small">Choose a related term to compare with ${escapeHtml(t.label)}.</p>
+      <div class="list" style="margin-bottom:14px">${relatedTerms(t).slice(0,6).map(r=>`<span class="pill" onclick="compareWith('${escapeAttr(r.label)}')">${escapeHtml(r.label)}</span>`).join("")}</div>
+      <div id="compareResult"></div>
+    </div>
+
+    <div class="card">
+      <div class="tabs" id="tabs">
+        <button class="tab active" onclick="showPanel('meaning',event)">Meaning</button>
+        <button class="tab" onclick="showPanel('skillsPanel',event)">Skills</button>
+        <button class="tab" onclick="showPanel('rolesPanel',event)">Roles</button>
+        <button class="tab" onclick="showPanel('countryPanel',event)">Country usage</button>
+        <button class="tab" onclick="showPanel('routingPanel',event)">Routing use</button>
+        ${simple ? "" : `<button class="tab" onclick="showPanel('evidencePanel',event)">Evidence</button><button class="tab" onclick="showPanel('governancePanel',event)">Governance</button>`}
+      </div>
+      <div id="meaning" class="panel active">
+        <h3>Meaning</h3>
+        <p>${escapeHtml(t.definition||plainMeaning(t))}</p>
+        <h3>Aliases</h3><div class="list">${(t.aliases||[]).slice(0,40).map(x=>`<span class="pill" onclick="setQuery('${escapeAttr(x)}')">${escapeHtml(x)}</span>`).join("") || "<span class='small'>No aliases available.</span>"}</div>
+      </div>
+      <div id="skillsPanel" class="panel">
+        <h3>Skills</h3>${clusters(t)}
+      </div>
+      <div id="rolesPanel" class="panel">
+        <h3>Common roles and titles</h3><div class="list">${(t.roles||[]).slice(0,80).map(x=>`<span class="pill" onclick="setQuery('${escapeAttr(x)}')">${escapeHtml(x)}</span>`).join("") || "<span class='small'>No role mappings available.</span>"}</div>
+      </div>
+      <div id="countryPanel" class="panel">
+        <h3>Country usage</h3>
+        <div class="note blue"><b>Equal-market rule:</b> Canada, India, and the USA are equal-priority markets. No market is primary or secondary.</div><br>
+        <div class="kv"><div class="k">Canada</div><div class="v">${escapeHtml(t.country?.Canada || "Needs Canada mapping / validation.")}</div></div>
+        <div class="kv"><div class="k">India</div><div class="v">${escapeHtml(t.country?.India || "Needs India mapping / validation.")}</div></div>
+        <div class="kv"><div class="k">USA</div><div class="v">${escapeHtml(t.country?.USA || "Needs USA mapping / validation.")}</div></div>
+      </div>
+      <div id="routingPanel" class="panel">
+        <h3>Routing use</h3>
+        <div class="note ${(t.status==='verified'||String(t.status).includes('verified')||t.status==='mature')&&t.bias==='pass'?'good':'warn'}">${escapeHtml(t.routing || "Do not route automatically until maturity, country mapping, source evidence, and human validation pass.")}</div>
+      </div>
+      <div id="evidencePanel" class="panel">
+        <h3>Evidence</h3>
+        <div class="kv"><div class="k">Source status</div><div class="v">${escapeHtml(friendlyStatus(t.evidence))}</div></div>
+        <div class="kv"><div class="k">Confidence</div><div class="v">${escapeHtml(t.confidence||t.source_confidence_score||"Review required")}</div></div>
+        <div class="kv"><div class="k">Source rule</div><div class="v">Open/government sources can support backbone. Market sources are evidence/reference only unless licensed or permissioned.</div></div>
+      </div>
+      <div id="governancePanel" class="panel">
+        <h3>Governance</h3>
+        <div class="kv"><div class="k">Bias status</div><div class="v">${escapeHtml(friendlyStatus(t.bias))}</div></div>
+        <div class="kv"><div class="k">Regulated</div><div class="v">${escapeHtml(t.regulated||"contextual")}</div></div>
+        <div class="kv"><div class="k">AI impact</div><div class="v"><b>${escapeHtml(impact.exposure)}</b> — ${escapeHtml(impact.summary)}</div></div>
+        <div class="note warn"><b>Release rule:</b> Agents recommend. Humans validate. Only approved vocabulary affects routing.</div>
+      </div>
+    </div>`;
+}
+function clusters(t){
+  const obj=t.skillClusters||{};
+  if(Object.keys(obj).length){
+    return Object.entries(obj).map(([c,vals])=>`<div class="cluster"><h4>${escapeHtml(c.replaceAll('_',' '))}</h4><div class="list">${(vals||[]).slice(0,60).map(s=>`<span class="pill" onclick="setQuery('${escapeAttr(s)}')">${escapeHtml(s)}</span>`).join('')}</div></div>`).join('');
+  }
+  const list=(t.skills||[]).slice(0,120);
+  return list.length ? `<div class="list">${list.map(s=>`<span class="pill" onclick="setQuery('${escapeAttr(s)}')">${escapeHtml(s)}</span>`).join("")}</div>` : "<p class='small'>No skill mappings available.</p>";
+}
+function showPanel(id,ev){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const target=document.getElementById(id); if(target) target.classList.add('active');
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  if(ev&&ev.target) ev.target.classList.add('active');
+}
+function scrollToTabs(){document.getElementById("tabs")?.scrollIntoView({behavior:"smooth"});}
+function relatedTerms(t){
+  return terms.filter(x=>x.id!==t.id && (x.dimension===t.dimension || x.parent===t.parent)).slice(0,10);
+}
+function renderSide(t){
+  const impact=aiImpact(t);
+  document.getElementById('side').innerHTML = `
+    <div class="card"><h3 class="side-title">Quick answer</h3>
+      <div class="kv"><div class="k">Type</div><div class="v">${escapeHtml(friendlyStatus(t.dimension))}</div></div>
+      <div class="kv"><div class="k">Parent</div><div class="v">${escapeHtml(t.parent||"Not mapped")}</div></div>
+      <div class="kv"><div class="k">Regulated</div><div class="v">${escapeHtml(t.regulated||"contextual")}</div></div>
+      <div class="kv"><div class="k">AI impact</div><div class="v">${escapeHtml(impact.exposure)}</div></div>
+    </div>
+    <div class="card"><h3 class="side-title">Don’t confuse with</h3><div class="list">${(t.doNotConfuse||t.excludes||[]).slice(0,10).map(x=>`<span class="pill" onclick="setQuery('${escapeAttr(x)}')">${escapeHtml(x)}</span>`).join("") || "<span class='small'>No do-not-confuse terms available.</span>"}</div></div>
+    <div class="card"><h3 class="side-title">Explore related terms</h3>${relatedTerms(t).slice(0,6).map(r=>`<div class="result" onclick="setQuery('${escapeAttr(r.label)}')"><b>${escapeHtml(r.label)}</b><small>${escapeHtml(friendlyStatus(r.dimension))} · ${escapeHtml(friendlyStatus(r.status))}</small></div>`).join("")}</div>
+    <div class="card"><h3 class="side-title">Next actions</h3>
+      <button class="secondary" style="width:100%;margin-bottom:8px" onclick="startCompare()">Compare terms</button>
+      <button class="secondary" style="width:100%;margin-bottom:8px" onclick="copySummary()">Copy summary</button>
+      <button class="secondary" style="width:100%" onclick="setMode('explorer')">Open Explorer Mode</button>
+    </div>`;
+}
+function startCompare(){
+  const box=document.getElementById("compareBox"); if(box){box.classList.add("show"); box.scrollIntoView({behavior:"smooth",block:"center"});}
+}
+function compareWith(label){
+  const other=findBest(label)?.term;
+  if(!currentTerm||!other) return;
+  document.getElementById("compareResult").innerHTML = `
+    <div class="compare-grid">
+      ${compareCard(currentTerm)}
+      ${compareCard(other)}
+    </div>`;
+}
+function compareCard(t){
+  return `<div class="compare-card">
+    <h4>${escapeHtml(t.label)}</h4>
+    <div class="kv"><div class="k">Type</div><div class="v">${escapeHtml(friendlyStatus(t.dimension))}</div></div>
+    <div class="kv"><div class="k">Meaning</div><div class="v">${escapeHtml(plainMeaning(t)).slice(0,260)}</div></div>
+    <div class="kv"><div class="k">Skills</div><div class="v">${(t.skills||[]).slice(0,8).map(escapeHtml).join(", ")}</div></div>
+    <div class="kv"><div class="k">Avoid when</div><div class="v">${doNotUseWhen(t).slice(0,3).map(escapeHtml).join(", ")}</div></div>
+  </div>`;
+}
+function copySummary(){
+  if(!currentTerm) return;
+  const t=currentTerm;
+  const text=`${t.label} is a ${friendlyStatus(t.dimension)} term. Meaning: ${plainMeaning(t)} Do not confuse it with: ${(t.doNotConfuse||t.excludes||[]).slice(0,5).join(", ") || "adjacent terms requiring review"}. Market rule: Canada, India, and the USA are equal-priority markets.`;
+  navigator.clipboard?.writeText(text).then(()=>showToast("Summary copied")).catch(()=>showToast("Copy unavailable"));
+}
+function renderNoMatch(q){
+  document.getElementById('answer').innerHTML = `<div class="card empty"><div class="big">🟡</div><h2>No approved match found</h2><p>“${escapeHtml(q)}” should be treated as a candidate term or alias and reviewed before official use.</p><div class="note warn"><b>Governance rule:</b> unknown terms do not become verified terms automatically.</div></div>`;
+  document.getElementById('side').innerHTML = `<div class="card"><h3>Recommended next step</h3><p class="small">Add this to the review queue. Check whether it is an alias, role, skill, tool, industry, risk term, or blocked phrase.</p></div>`;
+}
+function renderEmpty(){
+  document.getElementById('answer').innerHTML = `<div class="card empty"><div class="big">🔎</div><h2>Start with any hiring word.</h2><p>Search by role, skill, industry, capability, alias, or country context.</p><div class="chips" style="justify-content:center"><span class="chip" onclick="setQuery('AI engineer')">Search a role</span><span class="chip" onclick="setQuery('SQL')">Search a skill</span><span class="chip" onclick="setQuery('construction')">Search an industry</span></div></div>`;
+  document.getElementById('side').innerHTML = `<div class="card"><h3 class="side-title">Simple Mode</h3><p class="small">Fast lookup for recruiters and practitioners.</p></div><div class="card"><h3 class="side-title">Explorer Mode</h3><p class="small">Deep evidence, source, routing, governance, and AI Role Impact view.</p></div>`;
+}
+document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')runSearch(); if(e.key==='Escape')hideSuggestions();});
+document.getElementById('q').addEventListener('input',showSuggestions);
+document.addEventListener('click',e=>{if(!e.target.closest('.search-card')) hideSuggestions();});
+renderMeta();
+renderEmpty();
+</script>
+</body>
+</html>
