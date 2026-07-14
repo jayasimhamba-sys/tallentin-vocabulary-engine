@@ -153,7 +153,6 @@ button{border:0;cursor:pointer;border-radius:22px;font-weight:950;font-family:in
 
 <div class="toast" id="toast">Copied</div>
 
-<script src="data.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // Supabase client for anonymous term-flag submissions (INSERT-only; table locked down)
@@ -198,37 +197,88 @@ button{border:0;cursor:pointer;border-radius:22px;font-weight:950;font-family:in
   }
 </script>
 <script>
-const D = window.TALLENTIN_DATA || {};
-const terms = D["vocab_terms.json"] || [];
-const aliases = D["aliases.json"] || [];
-const roles = D["role_titles.json"] || [];
-const skills = D["skills.json"] || [];
-const sources = D["source_register.json"] || [];
-const blocked = D["blocked_terms.json"] || [];
+let D = {};
+let terms = []; // VS05: populated by initTerms() below — live public.vocab_terms, falls back to bundled data.js
+let aliases = [], roles = [], skills = [], sources = [], blocked = []; // VS06: only populated if data.js is lazily loaded (Supabase fetch failed)
 let currentMode = "simple";
 let currentTerm = null;
 
 const index = {};
 function norm(s){return String(s||"").toLowerCase().trim()}
 function add(k,v,kind){ if(k){ const key=norm(k); if(!index[key]) index[key]={term:v,kind,raw:k}; } }
-terms.forEach(t=>{
-  add(t.term,t,"preferred term"); add(t.label,t,"preferred term");
-  (t.aliases||[]).forEach(a=>add(a,t,"alias"));
-  (t.roles||[]).forEach(r=>add(r,t,"role"));
-  (t.skills||[]).forEach(s=>add(s,t,"skill"));
-});
-aliases.forEach(a=>{
-  const t = terms.find(x=>x.term===a.preferred_term);
-  if(t) add(a.alias,t,"alias");
-});
-roles.forEach(r=>{
-  const t = terms.find(x=>x.term===r.mapped_term);
-  if(t) add(r.role_title,t,"role");
-});
-skills.forEach(s=>{
-  const t = terms.find(x=>x.term===s.mapped_term);
-  if(t) add(s.skill_name,t,"skill");
-});
+
+// VS05: map live public.vocab_terms row (renamed columns) onto the field names the rest of this file expects
+function mapVocabRow(row){
+  return { ...row,
+    id: row.source_id, dimension: row.term_type, roles: row.related_roles||[],
+    skills: row.related_skills||[], skillClusters: row.skill_clusters||{},
+    doNotConfuse: row.do_not_confuse||[], country: row.country_notes||{}
+  };
+}
+
+// VS06: data.js (64MB) is no longer a static <script src> tag — it's only injected if the
+// live Supabase fetch fails, so a successful page load never requests it.
+function loadDataJs(){
+  return new Promise((resolve, reject)=>{
+    const s=document.createElement('script');
+    s.src='data.js';
+    s.onload=()=>resolve();
+    s.onerror=()=>reject(new Error('data.js failed to load'));
+    document.head.appendChild(s);
+  });
+}
+
+async function initTerms(){
+  try{
+    // Server enforces a max-rows cap (observed: 1000/request) regardless of requested range,
+    // so page through in batches until a short page tells us we've reached the end.
+    const PAGE = 1000;
+    let allRows = [], from = 0;
+    while(true){
+      const { data, error } = await sbClient.from('vocab_terms').select('*').range(from, from + PAGE - 1);
+      if(error) throw error;
+      allRows = allRows.concat(data || []);
+      if(!data || data.length < PAGE) break;
+      from += PAGE;
+    }
+    terms = allRows.map(mapVocabRow);
+  }catch(e){
+    console.warn('live vocab_terms fetch failed, lazily loading bundled data.js as fallback:', e && e.message || e);
+    try{
+      await loadDataJs();
+      D = window.TALLENTIN_DATA || {};
+      terms = D["vocab_terms.json"] || [];
+      aliases = D["aliases.json"] || [];
+      roles = D["role_titles.json"] || [];
+      skills = D["skills.json"] || [];
+      sources = D["source_register.json"] || [];
+      blocked = D["blocked_terms.json"] || [];
+    }catch(e2){
+      console.error('data.js fallback also failed:', e2 && e2.message || e2);
+      terms = [];
+    }
+  }
+  terms.forEach(t=>{
+    add(t.term,t,"preferred term"); add(t.label,t,"preferred term");
+    (t.aliases||[]).forEach(a=>add(a,t,"alias"));
+    (t.roles||[]).forEach(r=>add(r,t,"role"));
+    (t.skills||[]).forEach(s=>add(s,t,"skill"));
+  });
+  aliases.forEach(a=>{
+    const t = terms.find(x=>x.term===a.preferred_term);
+    if(t) add(a.alias,t,"alias");
+  });
+  roles.forEach(r=>{
+    const t = terms.find(x=>x.term===r.mapped_term);
+    if(t) add(r.role_title,t,"role");
+  });
+  skills.forEach(s=>{
+    const t = terms.find(x=>x.term===s.mapped_term);
+    if(t) add(s.skill_name,t,"skill");
+  });
+  renderMeta();
+  renderEmpty();
+}
 
 function badge(text,t='neutral'){return `<span class="badge ${t}">${escapeHtml(text)}</span>`}
 function tone(v,type){
@@ -703,8 +753,7 @@ function renderEmpty(){
 document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')runSearch(); if(e.key==='Escape')hideSuggestions();});
 document.getElementById('q').addEventListener('input',showSuggestions);
 document.addEventListener('click',e=>{if(!e.target.closest('.search-card')) hideSuggestions();});
-renderMeta();
-renderEmpty();
+initTerms(); // VS05: async load from live public.vocab_terms (replaces synchronous renderMeta()/renderEmpty() calls)
 </script>
 </body>
 </html>
