@@ -653,7 +653,7 @@ function renderAnswerV2(t,q="",found=null){
       ${termId?`<span class="src" id="v2copyId" data-id="${escA(termId)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>${esc(termId)}</span>`:""}
     </div>
 
-    <div class="flag-wrap" data-term-id="${escA(termId)}" data-term-label="${escA(label)}">
+    ${!verified?`<div class="flag-wrap" data-term-id="${escA(termId)}" data-term-label="${escA(label)}">
       <button class="secondary" id="flagBtn" onclick="openFlag()">🚩 Flag this term</button>
       <div class="flag-box" id="flagBox" style="display:none">
         <textarea id="flagText" rows="3" maxlength="2000" placeholder="What's wrong with this term? (required)"></textarea>
@@ -663,7 +663,7 @@ function renderAnswerV2(t,q="",found=null){
         </div>
       </div>
       <div class="flag-msg" id="flagMsg" style="display:none"></div>
-    </div>
+    </div>`:""}
   </div>`;
 
   // ---- interactions (scoped to #answer; reuses global showToast) ----
