@@ -216,6 +216,56 @@ function mapVocabRow(row){
   };
 }
 
+// VS08: bulk fetch excludes skill_clusters/country_notes/do_not_confuse — fetched per-term here instead.
+// Cache stores the in-flight/resolved Promise (keyed by source_id) so concurrent calls for the same
+// term share one request; failed fetches are evicted from the cache so a later view can retry.
+const termDetailCache = new Map();
+function fetchTermDetail(sourceId){
+  if(!sourceId) return Promise.resolve(null);
+  if(termDetailCache.has(sourceId)) return termDetailCache.get(sourceId);
+  const p = (async()=>{
+    const { data, error } = await sbClient.from('vocab_terms').select('skill_clusters,country_notes,do_not_confuse').eq('source_id', sourceId).maybeSingle();
+    if(error) throw error;
+    return data ? {
+      skillClusters: data.skill_clusters || {},
+      country: data.country_notes || {},
+      doNotConfuse: data.do_not_confuse || []
+    } : null;
+  })();
+  p.catch(()=>termDetailCache.delete(sourceId));
+  termDetailCache.set(sourceId, p);
+  return p;
+}
+
+// VS08: renderAnswerV2 stays sync/untouched — this wraps it. Skeleton render already happened by the
+// time this runs; here we show a placeholder (only where region/skill-cluster/confuse would appear,
+// since those are the sections that depend on the per-term detail fetch), fetch the detail, patch it
+// onto the same term object (so a later visit to this term skips the fetch entirely via __detailLoaded),
+// and re-render — but only if the user hasn't navigated to a different term while the fetch was in flight.
+function loadTermDetail(t,q="",found=null){
+  if(!t || t.__detailLoaded) return;
+  const wrap = document.querySelector('#answer .v2wrap');
+  const foot = wrap ? wrap.querySelector('.foot') : null;
+  let placeholder = null;
+  if(wrap && foot){
+    placeholder = document.createElement('div');
+    placeholder.className = 'detail-loading';
+    placeholder.style.cssText = "margin-top:16px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.4px;color:#928A7C";
+    placeholder.textContent = 'Loading region & skill detail…';
+    wrap.insertBefore(placeholder, foot);
+  }
+  fetchTermDetail(t.id).then(detail=>{
+    if(placeholder && placeholder.parentNode) placeholder.remove();
+    if(!detail) return;
+    Object.assign(t, detail);
+    t.__detailLoaded = true;
+    if(currentTerm===t) renderAnswerV2(t,q,found);
+  }).catch(e=>{
+    console.warn('fetchTermDetail failed for', t.id, ':', e && e.message || e);
+    if(placeholder && placeholder.parentNode) placeholder.remove();
+  });
+}
+
 // VS06: data.js (64MB) is no longer a static <script src> tag — it's only injected if the
 // live Supabase fetch fails, so a successful page load never requests it.
 function loadDataJs(){
@@ -235,7 +285,7 @@ async function initTerms(){
     const PAGE = 1000;
     let allRows = [], from = 0;
     while(true){
-      const { data, error } = await sbClient.from('vocab_terms').select('*').range(from, from + PAGE - 1);
+      const { data, error } = await sbClient.from('vocab_terms').select('source_id,term_type,related_roles,related_skills,term,label,aliases,status,simple,definition,parent').range(from, from + PAGE - 1);
       if(error) throw error;
       allRows = allRows.concat(data || []);
       if(!data || data.length < PAGE) break;
@@ -296,7 +346,7 @@ function setMode(mode){
   currentMode=mode;
   document.getElementById("simpleBtn").classList.toggle("active",mode==="simple");
   document.getElementById("explorerBtn").classList.toggle("active",mode==="explorer");
-  if(currentTerm){ renderAnswerV2(currentTerm); document.getElementById('side').innerHTML=''; document.querySelector('.grid')?.classList.add('is-v2-fullwidth'); }
+  if(currentTerm){ renderAnswerV2(currentTerm); loadTermDetail(currentTerm); document.getElementById('side').innerHTML=''; document.querySelector('.grid')?.classList.add('is-v2-fullwidth'); }
 }
 function showToast(msg="Copied"){
   const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show");
@@ -395,7 +445,7 @@ function runSearch(){
   if(!q){ renderEmpty(); return; }
   saveRecent(q);
   const found=findBest(q);
-  if(found){ currentTerm=found.term; renderAnswerV2(found.term,q,found); document.getElementById('side').innerHTML=''; document.querySelector('.grid')?.classList.add('is-v2-fullwidth'); }
+  if(found){ currentTerm=found.term; renderAnswerV2(found.term,q,found); loadTermDetail(found.term,q,found); document.getElementById('side').innerHTML=''; document.querySelector('.grid')?.classList.add('is-v2-fullwidth'); }
   else { currentTerm=null; renderNoMatch(q); }
 }
 function plainMeaning(t){
